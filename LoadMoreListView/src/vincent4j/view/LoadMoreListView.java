@@ -76,7 +76,7 @@ public class LoadMoreListView extends ListView {
     @Override
     public void setAdapter(ListAdapter adapter) {
         super.setAdapter(adapter);
-        updateFooterViews(LOAD_STATUS_NORMAL);
+        updateFooterViews(LOAD_STATUS_NORMAL, true);
     }
 
     /**
@@ -90,12 +90,16 @@ public class LoadMoreListView extends ListView {
         mOnLoadMoreListener = onLoadMoreListener;
     }
 
-    private void updateFooterViews(int status) {
-        if (mLoadState != status) {
-            mLoadState = status;
-            updateFooterViews();
-        }
-    }
+//  private void updateFooterViews(int status) {
+//  updateFooterViews(status, false);
+//}
+
+private void updateFooterViews(int status, boolean isForced) {
+  if (isForced || (mLoadState != status)) {
+      mLoadState = status;
+      updateFooterViews();
+  }
+}
 
     private void updateFooterViews() {
         Log.d(TAG, "updateFooterViews(" + mLoadState + ")");
@@ -139,7 +143,7 @@ public class LoadMoreListView extends ListView {
 
         @Override
         public void onClick(View v) {
-            updateFooterViews(LOAD_STATUS_LOADING);
+            updateFooterViews(LOAD_STATUS_LOADING, true);
             onLoadMore();
         }
     }
@@ -158,7 +162,7 @@ public class LoadMoreListView extends ListView {
     public void onLoadMoreComplete() {
         ((BaseAdapter) (((HeaderViewListAdapter) getAdapter())
                 .getWrappedAdapter())).notifyDataSetChanged();
-        updateFooterViews(LOAD_STATUS_NORMAL);
+        updateFooterViews(LOAD_STATUS_NORMAL, true);
     }
 
     /**
